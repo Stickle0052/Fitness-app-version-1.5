@@ -83,8 +83,7 @@ function bodyFocusBoost(exercise: ExerciseDefinition, profile: UserProfile): num
   return Object.values(map).reduce((max, value) => Math.max(max, value ?? 0), 0);
 }
 
-function chooseAnchor(sessionType: SessionType, candidates: ExerciseDefinition[], profile: UserProfile) {
-  const scored = candidates.map((exercise) => {
+function chooseAnchor(candidates: ExerciseDefinition[], profile: UserProfile) {  const scored = candidates.map((exercise) => {
     let score = 0;
     if (favoriteMatches(exercise, profile)) score += 5;
     if (exercise.isAnchor) score += 3;
@@ -177,8 +176,7 @@ export function generateWorkout(
   const symptomEffect = symptomImpact(cycleState?.currentSymptoms ?? []);
 
   const sessionCandidates = filterForSession(sessionType, profile);
-  const anchor = chooseAnchor(sessionType, sessionCandidates.filter((exercise) => exercise.category === 'compound'), profile);
-  const anchorPerformance = getAnchorPerformance(workouts, anchor, profile);
+const anchor = chooseAnchor(sessionCandidates.filter((exercise) => exercise.category === 'compound'), profile);  const anchorPerformance = getAnchorPerformance(workouts, anchor, profile);
   const modifier = phaseModifier(phase, anchorPerformance.trend === 'down') * symptomEffect.modifier;
 
   const selected: ExerciseDefinition[] = [anchor];
